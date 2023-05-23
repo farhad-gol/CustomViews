@@ -3,6 +3,7 @@ package com.fsc.customviews;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,8 @@ public class Help extends LinearLayout
     Activity Act;
     Context context;
 
+    private TypedArray attributes;
+
     public Help(Context context)
     {
 
@@ -57,6 +60,7 @@ public class Help extends LinearLayout
 
         super(context, attrs);
         this.context = context;
+        attributes = context.obtainStyledAttributes(attrs, R.styleable.Help);
         init();
 
     }
@@ -66,6 +70,7 @@ public class Help extends LinearLayout
 
         super(context, attrs, defStyle);
         this.context = context;
+        attributes = context.obtainStyledAttributes(attrs, R.styleable.Help);
         init();
 
     }
@@ -77,6 +82,9 @@ public class Help extends LinearLayout
 
         IMG_Help = (ImageView) findViewById(R.id.IMG_Help);
         IMG_Help.setOnClickListener(ONClickListener);
+
+        STR_Title = attributes.getString(R.styleable.Help_title);
+        STR_Body = attributes.getString(R.styleable.Help_body);
 
     }
 
