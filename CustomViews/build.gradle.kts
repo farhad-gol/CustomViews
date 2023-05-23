@@ -1,6 +1,11 @@
+import com.android.build.gradle.internal.utils.createPublishingInfoForApp
+
 plugins {
     id("com.android.library")
+    id("maven-publish")
 }
+
+group = "com.github.farhad-gol"
 
 android {
     namespace = "com.fsc.customviews"
