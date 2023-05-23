@@ -11,6 +11,12 @@ android {
     namespace = "com.fsc.customviews"
     compileSdk = 33
 
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
     defaultConfig {
         minSdk = 24
 
@@ -41,4 +47,26 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+}
+
+publishing {
+
+    publications {
+
+        register<MavenPublication>("release") {
+
+            groupId = "com.github.farhad-gol"
+            artifactId = "CustomViews"
+            version = "1.0.0"
+
+            afterEvaluate {
+
+                from(components["release"])
+
+            }
+
+        }
+
+    }
+
 }
