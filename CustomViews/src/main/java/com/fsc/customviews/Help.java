@@ -10,13 +10,24 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
+
+import com.fsc.customviews.databinding.AlertHelpBinding;
+import com.fsc.customviews.databinding.WidgetHelpBinding;
 
 public class Help extends LinearLayout
 {
+
+    private WidgetHelpBinding widgetHelpBinding;
+
     public interface HelpListener
     {
 
-        public void SetValue(boolean bol_Click);
+        public void SetValue(String text);
 
     }
 
@@ -29,20 +40,16 @@ public class Help extends LinearLayout
 
     private HelpListener Helplistener;
 
-    void SetValue(boolean bol_Click)
+    void SetValue(String text)
     {
 
-        if (Helplistener != null) Helplistener.SetValue(bol_Click);
+        if (Helplistener != null) Helplistener.SetValue(text);
 
     }
 
-    ImageView IMG_Help;
-
-    String STR_Title = "";
-    String STR_Body = "";
-
-    Activity Act;
     Context context;
+
+    private HelpViewModel helpViewModel;
 
     private TypedArray attributes;
 
@@ -78,28 +85,22 @@ public class Help extends LinearLayout
     private void init()
     {
 
-        inflate(getContext(), R.layout.widget_help, this);
+        helpViewModel = new ViewModelProvider((ViewModelStoreOwner) context).get(HelpViewModel.class);
 
-        IMG_Help = (ImageView) findViewById(R.id.IMG_Help);
+        widgetHelpBinding = WidgetHelpBinding.inflate(LayoutInflater.from(context), this, true);
+        ImageView IMG_Help = widgetHelpBinding.IMGHelp;
         IMG_Help.setOnClickListener(ONClickListener);
 
-        STR_Title = attributes.getString(R.styleable.Help_title);
-        STR_Body = attributes.getString(R.styleable.Help_body);
+        helpViewModel.setMLD_STR_Title(attributes.getString(R.styleable.Help_title));
+        helpViewModel.setMLD_STR_Text(attributes.getString(R.styleable.Help_body));
 
     }
 
-    public void SetTitleBody(String Title, String body)
+    public void SetTitleBody(String Title, String Body)
     {
 
-        STR_Title = Title;
-        STR_Body = body;
-
-    }
-
-    public void SetAct(Activity Act)
-    {
-
-        this.Act = Act;
+        helpViewModel.setMLD_STR_Title(Title);
+        helpViewModel.setMLD_STR_Text(Body);
 
     }
 
@@ -116,20 +117,18 @@ public class Help extends LinearLayout
             if (v.getId() == R.id.IMG_Help)
             {
 
-                //LayoutInflater li = LayoutInflater.from(Act);
-                LayoutInflater li = LayoutInflater.from(context);
-                View promptsView = li.inflate(R.layout.alert_help, null);
+                SetValue("F click");
+
+                AlertHelpBinding alertHelpBinding;
+                alertHelpBinding = AlertHelpBinding.inflate(LayoutInflater.from(context));
+                TextView TV_Title = alertHelpBinding.TVAlertHelpTitle;
+                TextView TV_Body = alertHelpBinding.TVAlertHelpBody;
+                helpViewModel.getMLD_STR_Title().observe((LifecycleOwner) context, TV_Title::setText);
+                helpViewModel.getMLD_STR_Text().observe((LifecycleOwner) context, TV_Body::setText);
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
-                alertDialogBuilder.setView(promptsView);
-
-                final TextView TV_Title = (TextView) promptsView.findViewById(R.id.TV_AlertHelp_Title);
-
-                final TextView TV_Body = (TextView) promptsView.findViewById(R.id.TV_AlertHelp_Body);
-
-                TV_Title.setText(STR_Title);
-                TV_Body.setText(STR_Body);
+                alertDialogBuilder.setView(alertHelpBinding.getRoot());
 
                 alertDialogBuilder.setCancelable(true);
 

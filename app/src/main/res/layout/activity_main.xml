@@ -16,10 +16,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.fsc.customviews.Help
+        android:id="@+id/h11"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints"
         app:title = "Hello"
-        app:body = "Farhad"/>
+        app:body = "Farhad"
+        app:style = "@style/STL_Text"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

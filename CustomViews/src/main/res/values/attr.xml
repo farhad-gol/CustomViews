@@ -5,6 +5,7 @@
 
         <attr name="title" format="string"/>
         <attr name="body" format="string"/>
+        <attr name="style" format="reference"/>
 
     </declare-styleable>
 </resources>
